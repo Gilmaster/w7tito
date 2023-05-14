@@ -1,4 +1,4 @@
-import * as React from 'react';
+import React, {useState, useEffect} from 'react';
 import { View, Text, TextInput, TouchableOpacity, StyleSheet } from "react-native";
 import * as Animatable from "react-native-animatable";
 import { useNavigation } from "@react-navigation/native";
@@ -9,17 +9,17 @@ import * as yup from "yup";
 const schemaLogin = yup.object({
     email: yup.string().email('E-mail Invalido').required('Informe seu e-mail'),
     password: yup.string().min(6, 'Sua senha deter pelo menos 6(seis) digitos').required('Informe sua senha')
-})
+});
 
 export default function Login() {
 
     const { control, handleSubmit, formState: {errors}} = useForm({
         resolver: yupResolver(schemaLogin)
-    })
+    });
 
     function SignIn(data) {
         console.log(data);
-    }
+    };
 
     const navigation = useNavigation();
 
@@ -80,7 +80,7 @@ export default function Login() {
 
         </View>
     );
-}
+};
 
 const styles = StyleSheet.create({
     container:{

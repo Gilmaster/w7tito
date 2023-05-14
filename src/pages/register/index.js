@@ -5,24 +5,22 @@ import { useForm, Controller } from "react-hook-form";
 import { yupResolver } from "@hookform/resolvers/yup";
 import * as yup from "yup";
 
-const schemaRegister = yup.object({
-    username: yup.string().required('Informe seu Nome e Sobrenome'),
-    position: yup.string().required('Informe seu cargo'),
-    email: yup.string().email('E-mail Invalido').required('Informe seu e-mail'),
-    enterprise: yup.string().required('Informe sua Empresa'),
-    branch: yup.string().required('Informe sua Filial'),
-    password: yup.string().min(6, 'Sua senha deter pelo menos 6(seis) digitos').required('Informe sua senha')
-})
-
 export default function Register() {
+
+    const schemaRegister = yup.object({
+        username: yup.string().required('Informe seu Nome e Sobrenome'),
+        email: yup.string().email('E-mail Invalido').required('Informe seu e-mail'),
+        password: yup.string().min(6, 'Sua senha deter pelo menos 6(seis) digitos').required('Informe sua senha'),
+        confirmPassword: yup.string().oneOf([yup.ref('password'), null], "Senhas não conferem"),
+    });
 
     const { control, handleSubmit, formState: {errors}} = useForm({
         resolver: yupResolver(schemaRegister)
-    })
+    });
 
     function saveRegidter(data) {
         console.log(data);
-    }
+    };
 
     return(
         <View style={styles.container}>
@@ -49,154 +47,57 @@ export default function Register() {
                     />
                     {errors.username && <Text style={styles.labelError}>{errors.username?.message}</Text>}
 
-                    <Text style={styles.titleForm}>Cargo</Text>
-                <Controller
-                 control={control}
-                 name='position'
-                 render={({ field: { onChange, onBlur, value } }) => (
-                    <TextInput 
-                     style={styles.user} 
-                     placeholder='informe seu cargo'
-                     onBlur={onBlur}
-                     onChangeText={onChange}
-                     value={value}
+                    <Text style={styles.titleForm}>E-mail</Text>
+                    <Controller
+                    control={control}
+                    name='email'
+                    render={({ field: { onChange, onBlur, value } }) => (
+                        <TextInput 
+                        style={styles.user} 
+                        placeholder='informe seu e-mail'
+                        onBlur={onBlur}
+                        onChangeText={onChange}
+                        value={value}
+                        />
+                    )}
                     />
-                 )}
-                />
-                {errors.position && <Text style={styles.labelError}>{errors.position?.message}</Text>}
+                    {errors.email && <Text style={styles.labelError}>{errors.email?.message}</Text>}
 
-                <Text style={styles.titleForm}>E-mail</Text>
-                <Controller
-                 control={control}
-                 name='email'
-                 render={({ field: { onChange, onBlur, value } }) => (
-                    <TextInput 
-                     style={styles.user} 
-                     placeholder='informe seu e-mail'
-                     onBlur={onBlur}
-                     onChangeText={onChange}
-                     value={value}
+                    <Text style={styles.titleForm}>Senha</Text>
+                    <Controller
+                    control={control}
+                    name='password'
+                    render={({ field: { onChange, onBlur, value } }) => (
+                        <TextInput 
+                            style={styles.user} 
+                            placeholder='Informe uma senha'
+                            secureTextEntry={true}
+                            onBlur={onBlur}
+                            onChangeText={onChange}
+                            value={value}
+                        />
+                    )}
                     />
-                 )}
-                />
-                {errors.email && <Text style={styles.labelError}>{errors.email?.message}</Text>}
+                    <Text style={styles.titleForm}>Confirme a Senha</Text>
+                    <Controller
+                        control={control}
+                        name='confirmPassword'
+                        render={({ field: { onChange, onBlur, value } }) => (
+                            <TextInput 
+                            style={styles.user} 
+                            placeholder='Confirme sua senha'
+                            secureTextEntry={true}
+                            onBlur={onBlur}
+                            onChangeText={onChange}
+                            value={value}
+                        />
+                    )}
+                    />
+                    {errors.confirmPassword && <Text style={styles.labelError}>{errors.confirmPassword?.message}</Text>}
 
-                <Text style={styles.titleForm}>Empresa</Text>
-                <Controller
-                 control={control}
-                 name='enterprise'
-                 render={({ field: { onChange, onBlur, value } }) => (
-                    <TextInput 
-                     style={styles.user} 
-                     placeholder='Informe sua empresa'
-                     onBlur={onBlur}
-                     onChangeText={onChange}
-                     value={value}
-                    />
-                 )}
-                />
-                {errors.enterprise && <Text style={styles.labelError}>{errors.enterprise?.message}</Text>}
-                
-                <Text style={styles.titleForm}>Cidade</Text>
-                <Controller
-                 control={control}
-                 name='city'
-                 render={({ field: { onChange, onBlur, value } }) => (
-                    <TextInput 
-                     style={styles.user} 
-                     placeholder='Informe a cidade'
-                     onBlur={onBlur}
-                     onChangeText={onChange}
-                     value={value}
-                    />
-                 )}
-                />
-                {errors.city && <Text style={styles.labelError}>{errors.city?.message}</Text>}
-                
-                <Text style={styles.titleForm}>Bairro</Text>
-                <Controller
-                 control={control}
-                 name='neighborhood'
-                 render={({ field: { onChange, onBlur, value } }) => (
-                    <TextInput 
-                     style={styles.user} 
-                     placeholder='Informe o bairro'
-                     onBlur={onBlur}
-                     onChangeText={onChange}
-                     value={value}
-                    />
-                 )}
-                />
-                {errors.neighborhood && <Text style={styles.labelError}>{errors.neighborhood?.message}</Text>}
-                
-                <Text style={styles.titleForm}>Rua/Avenida</Text>
-                <Controller
-                 control={control}
-                 name='street'
-                 render={({ field: { onChange, onBlur, value } }) => (
-                    <TextInput 
-                     style={styles.user} 
-                     placeholder='Informe o rua/av.'
-                     onBlur={onBlur}
-                     onChangeText={onChange}
-                     value={value}
-                    />
-                 )}
-                />
-                {errors.street && <Text style={styles.labelError}>{errors.street?.message}</Text>}
-
-                <Text style={styles.titleForm}>Numero</Text>
-                <Controller
-                 control={control}
-                 name='number'
-                 render={({ field: { onChange, onBlur, value } }) => (
-                    <TextInput 
-                     style={styles.user} 
-                     placeholder='Numero'
-                     onBlur={onBlur}
-                     onChangeText={onChange}
-                     value={value}
-                    />
-                 )}
-                />
-                {errors.number && <Text style={styles.labelError}>{errors.number?.message}</Text>}
-
-                <Text style={styles.titleForm}>Filial</Text>
-                <Controller
-                 control={control}
-                 name='branch'
-                 render={({ field: { onChange, onBlur, value } }) => (
-                    <TextInput 
-                     style={styles.user} 
-                     placeholder='Informe sua filial'
-                     onBlur={onBlur}
-                     onChangeText={onChange}
-                     value={value}
-                    />
-                 )}
-                />
-                {errors.branch && <Text style={styles.labelError}>{errors.branch?.message}</Text>}
-
-                <Text style={styles.titleForm}>Senha</Text>
-                <Controller
-                 control={control}
-                 name='password'
-                 render={({ field: { onChange, onBlur, value } }) => (
-                    <TextInput 
-                     style={styles.user} 
-                     placeholder='Informe uma senha'
-                     secureTextEntry={true}
-                     onBlur={onBlur}
-                     onChangeText={onChange}
-                     value={value}
-                    />
-                 )}
-                />
-                {errors.password && <Text style={styles.labelError}>{errors.password?.message}</Text>}
-
-                <TouchableOpacity style={styles.button}>
-                    <Text style={styles.buttonText} onPress={handleSubmit(saveRegidter)}>Cadastrar</Text>
-                </TouchableOpacity>
+                    <TouchableOpacity style={styles.button}>
+                        <Text style={styles.buttonText} onPress={handleSubmit(saveRegidter)}>Cadastrar</Text>
+                    </TouchableOpacity>
 
                 </Animatable.View>
             </ScrollView>
@@ -236,6 +137,12 @@ const styles = StyleSheet.create({
         fontSize: 16,
     },
     password: {
+        borderBottomWidth: 1,
+        height: 40,
+        marginBottom: 12,
+        fontSize: 16,
+    },
+    confirmPassword: {
         borderBottomWidth: 1,
         height: 40,
         marginBottom: 12,
